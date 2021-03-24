@@ -8,7 +8,7 @@ const questions = [
     'Enter your project title. (Required)', 'Enter your project description. (Required)',
     'Enter instructions to install your project. (Required)', 'Please provide the relative path for a demo. (Required)',
     'What is the license for the project?', 'Would you like to include a contribution section?',
-    'What are the contribution guidelines?', 'Would you like to include test instructions?', 'What are the tests instructions?', 'Any additional informtion to list under Questions?'
+    'What are the contribution guidelines?', 'Would you like to include test instructions?', 'What are the tests instructions?', 'Any additional informtion to list under questions?'
 ];
 
 // function to ensure required fields are populated

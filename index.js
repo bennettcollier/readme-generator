@@ -1,27 +1,159 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const generateMarkDown = require('./utils/generateMarkdown');
+const licenses = require('./utils/licenses');
 
-// array of questions for user
 const questions = [
-    'Enter your GitHub username. (Required)', 'Enter your email address. (Required)',
-    'Enter your project title. (Required)', 'Enter your project description. (Required)',
-    'Enter instructions to install your project. (Required)', 'Please provide the relative path for a demo. (Required)',
-    'What is the license for the project?', 'Would you like to include a contribution section?',
-    'What are the contribution guidelines?', 'Would you like to include test instructions?', 'What are the tests instructions?', 'Any additional informtion to list under questions?'
+    {
+        type: 'input',
+        name: 'title',
+        message: 'What is the name of your project?',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter a valid project name.");
+            return false;
+          }
+        }
+    },  
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Please describe your project.',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter a valid project description.");
+            return false;
+          }
+        }
+    },
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'Please state how to install your project.',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter valid installation instructions.");
+            return false;
+          }
+        }
+    },
+    {
+        type: 'input',
+        name: 'useage',
+        message: 'Please describe how to use the project.',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter a valid description.");
+            return false;
+          }
+        }
+    },
+    {
+        type: 'input',
+        name: 'contributing',
+        message: 'Please provide ideas for future contributions.',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter valid contribution ideas.");
+            return false;
+          }
+        }
+    },
+    {
+        type: 'input',
+        name: 'testinstructions',
+        message: 'Please write the test instructions.',
+        validate: nameInput => {
+          if(nameInput){
+            return true;
+          } else {
+            console.log("Please enter valid test instructions.");
+            return false;
+          }
+        }
+    },
+    {
+        type: 'list',
+        name: 'license',
+        message: 'What license is this project using?',
+        choices: Object.keys(licenses),
+    },
+    {
+        type: 'input',
+        name: 'githubrepolink',
+        message: 'Please enter the link to your GitHub repository.', 
+        validate: nameInput => {
+            testgithub = /.+(github.com)\/(.+)\/(.*)/.test(nameInput);
+            if(testgithub){
+                return true;
+            } else {
+                console.log("Please enter a valid GitHub repository link.");
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Please enter your email address. (Required)',
+        validate: nameInput => {
+            validemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(nameInput); //regex test for valid email
+            
+            if(validemail){
+                return true;
+          } else {
+            console.log("Please enter a valid email address.");
+            return false;
+          }
+        }
+    },
 ];
 
-// function to ensure required fields are populated
+const promptUser = () => {  
+    return inquirer.prompt(questions);
+};
+
+function writeToFile(fileName, data) {
+    return new Promise((resolve,reject)=>{
+        fs.writeFile(fileName , data, err => {
+            if(err){
+                reject(err);
+                return;
+            }
+            resolve({
+                ok:true,
+                message: fileName + "was created!"
+            });
+        });
+    });
+};
+
+function init() {
+    promptUser().then(data =>{
+        let mdStr = generateMarkdown(data);
+        writeToFile("README.md", mdStr);
+    });
+}
+
 const validateInput = promptField => {
     if (promptField) {
         return true;
     } else {
-        console.log(`Please provide your response.`);
+        console.log(`Please provide a valid response.`);
         return false;
     }
 }
 
-// present user with a list of prompts to capture info for readme file
 const promptUser = () => {
     return inquirer
         .prompt([{
@@ -69,7 +201,7 @@ const promptUser = () => {
                 if (checkboxSelection.length > 0) {
                     return true;
                 } else {
-                    console.log('Please make a selection.');
+                    console.log('Please make a valid selection.');
                 }
             }
         },
@@ -105,7 +237,6 @@ const promptUser = () => {
         ])
 };
 
-// function to write README file
 function writeToFile(fileName, data) {
     return new Promise((resolve, reject) => {
         fs.writeFile(fileName, data, err => {
@@ -115,16 +246,14 @@ function writeToFile(fileName, data) {
             }
             resolve({
                 ok: true,
-                message: 'File created!'
+                message: 'Your file was created!'
             })
         })
     });
 };
 
-// function to initialize program
 function init() {
     promptUser().then(answers => generateMarkDown(answers)).then(result => writeToFile("./README.md", result));
 }
 
-// function call to initialize program
 init();

@@ -1,37 +1,40 @@
-function generateReadme(answers) {
-    return `
-<h1 align="center">${answers.projectTitle} </h1>
+function generateReadme {
+  licenseObj = licenses[data.license]; 
+
+  return `
+  # Project Title: ${data.title} 
+  ### [![License](${licenseObj.iconLink})](${licenseObj.link})
   
-![badge](https://img.shields.io/badge/license-${answers.license}-brightgreen)<br />
-## Description
-${answers.description}
-## Table of Contents
-- [Description](#description)
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-- [Contributing](#contributing)
-- [Tests](#tests)
-- [Questions](#questions)
-## Installation
-${answers.installation}
-## Usage
-${answers.usage}
-## License
-![badge](https://img.shields.io/badge/license-${answers.license}-brightgreen)
-<br />
-This application is covered by the ${answers.license} license. 
-## Contributing
-${answers.contributing}
-## Tests
-✏️ ${answers.tests}
-## Questions
-${answers.questions}<br />
-<br />
-:octocat: Find me on GitHub: [${answers.username}](https://github.com/${answers.username})<br />
-<br />
-✉️ Email me with any questions: ${answers.email}<br /><br />
-_This README was generated with ❤️ by [README-generator](https://github.com/jpd61/README-generator) _`;
+  ## Table of contents:
+  1. [Title](#Project-Title)
+  1. [License](#License)
+  1. [Description](#Description)
+  1. [Installation](#Installation-Instructions)
+  1. [Useage](#How-To-Use)
+  1. [How to Contribute](#How-to-Contribute)
+  1. [Questions](#Questions)
+
+  ## License: 
+  ### This project is licensed under ${licenseObj.name} (click on icon near the top):
+  or here: [${licenseObj.name}](${licenseObj.link})
+ 
+  ## Description:
+  ${data.description}
+  ## Installation Instructions:
+  ${data.installation}
+  ## How To Use
+  ${data.useage}
+  ## How to Contribute:
+  * ${data.contributing}
+  * Help with bugfixes and features by submitting your solutions in pull requrets
+  ## Questions
+  Feel free to reach out either in the projects GitHub page or send an email to the address below
+  ### Github page:
+  [GitHub](${data.githubrepolink})
+  ### email:
+  [${data.email}](mailto:${data.email}) 
+`;
 }
+
 
 module.exports = generateReadme;
